@@ -35,11 +35,20 @@ public class BookController
     {
         bookService.delete(id);
     }
-    @PutMapping("/updateBook/{id}")
-    public Book Updatebook(@PathVariable Long bookId,@RequestBody Book book)
+    @PutMapping("/updateBook/{bookId}")
+    public ResponseEntity<Book> Updatebook(@PathVariable Long bookId, @RequestBody Book book)
     {
         //Additional Logic to update book
-         return bookService.save(book);
+        Book ExistingBook=bookService.findBookById(bookId);
+        if(ExistingBook == null)
+        {
+            return ResponseEntity.notFound().build();
+        }
+        ExistingBook.setAuthor(book.getAuthor());
+        ExistingBook.setTitle(book.getTitle());
+        ExistingBook.setBorrowed(book.isBorrowed());
+        Book updateBook=bookService.save(ExistingBook);
+        return  ResponseEntity.ok(updateBook);
     }
     @PostMapping("/{bookId}/borrow/{userId}")
     public ResponseEntity<Book> borrowbook(@PathVariable Long bookId, @PathVariable Long userId)

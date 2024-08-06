@@ -23,4 +23,5 @@ public class Book
     //We added a relationship between the Book and User entities to track which user has borrowed a book.
     @JoinColumn(name="user_id")
     private User borrowedBy;
+
 }
